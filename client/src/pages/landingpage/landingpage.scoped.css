@@ -9,7 +9,13 @@
 }
 
 .felxdiv {
+  /* margin-top: 5%; */
   flex: 1;
+  margin: 0 auto;
+}
+
+.spinnerdashboard {
+  margin-top: 20%;
 }
 
 .chartsvg {

@@ -103,13 +103,18 @@ const Landingpage = () => {
       </div>
       <footer class="mastfoot mt-auto bg-primary ">
         <div class="inner">
-          <a href="https://hpb.health.gov.lk/en" className="linkref">
+          <a
+            href="https://hpb.health.gov.lk/en"
+            target="_blank"
+            className="linkref"
+          >
             Reference HEALTH PROMOTION BUREAU Sri Lanka
           </a>
           <br />
           <a
             href="https://github.com/RizkyRajitha/covidgraph"
             className="linkref"
+            target="_blank"
           >
             <i class="fab fa-github fa-2x"></i>
           </a>
