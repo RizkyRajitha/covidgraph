@@ -13,24 +13,30 @@ import {
   ResponsiveContainer
 } from "recharts";
 // const data = [{ name: "Page A", uv: 400, pv: 2400, amt: 2400 }];
-
+const API =
+  "https://lvv3icabfe.execute-api.us-east-1.amazonaws.com/default/helloworld";
 const axios = require("axios").default;
 
 const Landingpage = () => {
   const [data, setdata] = useState([]);
   const [updatetime, setupdatetime] = useState("");
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
+    setisLoading(true);
     axios
-      .get(
-        "https://lvv3icabfe.execute-api.us-east-1.amazonaws.com/default/helloworld"
-      )
+      .get(API)
       .then(result => {
         console.log(result.data);
         setdata(result.data.data);
-        setupdatetime(result.data.updateTime);
+        setisLoading(false);
+
+        var time = new Date(result.data.updateTime);
+
+        setupdatetime(time.toLocaleString());
       })
       .catch(err => {
+        setisLoading(false);
         console.log(err);
       });
   }, []);
@@ -45,7 +51,18 @@ const Landingpage = () => {
         </div>
       </nav>
       <div className="container graphOuter">
-        <div className="felxdiv"></div>
+        <div className="felxdiv">
+          {" "}
+          <div className="spinnerdashboard">
+            <div
+              hidden={!isLoading}
+              className="spinner-border text-primary loading"
+              role="status"
+            >
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
         <div className="container  graphInner">
           {data[0] && (
             <ResponsiveContainer width="80%" height="80%">
@@ -82,9 +99,7 @@ const Landingpage = () => {
           )}
         </div>
 
-        <div className="updatediv">
-          Last update : {data[0] && data[data.length - 1].update_date_time}{" "}
-        </div>
+        <div className="updatediv">Last update : {data[0] && updatetime}</div>
       </div>
       <footer class="mastfoot mt-auto bg-primary ">
         <div class="inner">
@@ -92,7 +107,10 @@ const Landingpage = () => {
             Reference HEALTH PROMOTION BUREAU Sri Lanka
           </a>
           <br />
-          <a href="https://hpb.health.gov.lk/en" className="linkref">
+          <a
+            href="https://github.com/RizkyRajitha/covidgraph"
+            className="linkref"
+          >
             <i class="fab fa-github fa-2x"></i>
           </a>
         </div>
