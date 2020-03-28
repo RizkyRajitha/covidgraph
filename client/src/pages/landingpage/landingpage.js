@@ -14,19 +14,21 @@ import {
 } from "recharts";
 // const data = [{ name: "Page A", uv: 400, pv: 2400, amt: 2400 }];
 
-const API = "";
-
 const axios = require("axios").default;
 
 const Landingpage = () => {
   const [data, setdata] = useState([]);
+  const [updatetime, setupdatetime] = useState("");
 
   useEffect(() => {
     axios
-      .get(API)
+      .get(
+        "https://lvv3icabfe.execute-api.us-east-1.amazonaws.com/default/helloworld"
+      )
       .then(result => {
         console.log(result.data);
-        setdata(result.data);
+        setdata(result.data.data);
+        setupdatetime(result.data.updateTime);
       })
       .catch(err => {
         console.log(err);
