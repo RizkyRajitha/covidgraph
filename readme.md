@@ -1,5 +1,7 @@
 ## Graphical Representation of covid-19 report Sri Lanka
 
+![website image](https://res.cloudinary.com/dijjqfsto/image/upload/v1585492686/covid_cmxq7s.png)
+
 https://covidlk.now.sh/
 
 This project is a representation of data about ongoing viral pandemic of coronavirus disease 2019 (COVID-19) in Sri Lanka.
