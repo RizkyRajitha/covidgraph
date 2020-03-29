@@ -1,134 +1,92 @@
-.graphInner {
-  /* background-color: aqua; */
-  /* border: 1px solid red; */
-  width: 100%;
-  height: 100%;
-  /* margin-top: 10%; */
-  margin: 0 auto;
-  align-content: space-around;
-}
-
-.felxdiv {
-  /* margin-top: 5%; */
-  flex: 1;
-  margin: 0 auto;
-}
-
 .spinnerdashboard {
-  margin-top: 20%;
-}
-
-.chartsvg {
-  margin-left: 10%;
-  margin-top: 10%;
-}
-
-.graphOuter {
-  margin-left: 21%;
-  align-content: space-around;
+  margin-top: 1%;
   margin: 0 auto;
-  /* margin-top: 7%; */
-  /* border: 1px solid black; */
-  width: 1200px;
-  height: 600px;
-  display: flex;
-  flex-direction: column;
 }
 
-@media screen and (max-width: 770px) {
-  .chartsvg {
-    margin-left: 4%;
-    margin-top: 6%;
+.spinnerinnerdiv {
+  margin-top: 0px;
+  text-align: center;
+  margin-top: 2%;
+}
+
+.tablediv {
+  /* width: 80%; */
+  margin-top: 4%;
+  margin-bottom: 1%;
+}
+
+.chartdiv {
+  height: 60vh;
+}
+
+.navtitle {
+  font-size: 1.2rem;
+}
+
+.foottile {
+  font-size: 1.2rem;
+}
+
+@media screen and (max-width: 570px) {
+  .navtitle {
+    font-size: 1rem;
   }
-  .graphOuter {
-    margin-left: 0%;
-    /* align-content: space-around; */
-    margin: 0 auto;
-    margin-top: 7%;
-    /* border: 1px solid black; */
-    width: 770px;
-    height: 500px;
+  th {
+    font-size: 0.8rem;
   }
 }
 
-@media screen and (max-width: 575px) {
-  .chartsvg {
-    margin-left: 1%;
-    margin-top: 1%;
-  }
-  .graphOuter {
-    margin-left: 0%;
-    /* align-content: space-around; */
-    margin: 0 auto;
-    margin-top: 7%;
-    /* border: 1px solid black; */
-    width: 500px;
+@media screen and (max-width: 500px) {
+  .maindiv {
     height: 400px;
   }
+  .chartdiv {
+    height: 380px;
+  }
+
+  #graphdiv {
+    width: 97.5%;
+  }
+  .container {
+    /* width: 97.5% !important; */
+    max-width: 500px !important;
+  }
+
+  .navtitle {
+    font-size: 0.8rem;
+  }
+  .foottile {
+    font-size: 0.8rem;
+  }
+  /* .footericon {
+    margin-top: 1%;
+    font-size: 1rem;
+  } */
 }
 
-@media screen and (max-width: 507px) {
-  .chartsvg {
-    margin-left: 1%;
-    margin-top: 1%;
+@media screen and (max-width: 430px) {
+  .navtitle {
+    font-size: 0.8rem;
   }
-  .graphOuter {
-    /* margin-left: 21%; */
-    /* align-content: space-around; */
-    margin: 0 auto;
-    margin-top: 7%;
-    /* border: 1px solid black; */
-    width: 450px;
-    height: 300px;
-    /* display: flex;
-    flex-direction: column; */
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .chartsvg {
-    margin-left: 1%;
-    margin-top: 1%;
-  }
-  .graphOuter {
-    /* margin-left: 21%; */
-    /* align-content: space-around; */
-    margin: 0 auto;
-    margin-top: 7%;
-    /* border: 1px solid black; */
-    width: 380px;
-    height: 200px;
-    /* display: flex;
-    flex-direction: column; */
+  .foottile {
+    font-size: 0.8rem;
   }
 }
 
-@media screen and (max-width: 380px) {
-  .chartsvg {
-    margin-left: 1%;
-    margin-top: 1%;
+@media screen and (max-width: 330px) {
+  .navtitle {
+    font-size: 0.7rem;
   }
-  .graphOuter {
-    /* margin-left: 21%; */
-    /* align-content: space-around; */
-    margin: 0 auto;
-    margin-top: 7%;
-    /* border: 1px solid black; */
-    width: 330px;
-    height: 200px;
-    /* display: flex;
-    flex-direction: column; */
+
+  .foottile {
+    font-size: 0.8rem;
   }
 }
 
 .linkref {
-  margin-top: 1%;
+  /* margin-top: %; */
   color: white;
   text-decoration: none !important;
-}
-
-.inner {
-  padding-top: 0.8%;
 }
 
 a:focus,
@@ -137,9 +95,17 @@ a:hover {
 }
 
 .mastfoot {
-  position: fixed;
-  left: 0;
+  clear: both;
+  position: relative;
+  height: 200px;
+  margin-top: -200px;
+  /* position: fixed;*/
   bottom: 0;
+  left: 0;
+  /* position: relative; */
+  /* position: fixed; */
+  /* left: 0; */
+  /* bottom: 0; */
   width: 100%;
   height: 8%;
   color: white;
@@ -150,4 +116,12 @@ a:hover {
 .updatediv {
   text-align: center;
   margin: 0 auto;
+}
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+footer p {
+  margin-bottom: 0.25rem;
 }

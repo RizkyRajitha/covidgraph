@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from "react";
-// import Navbar from "../../components/navbar";
-// import Footer from "../../components/footer/footer";
+
+import App from "./chart";
 import "./landingpage.scoped.css";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from "recharts";
-// const data = [{ name: "Page A", uv: 400, pv: 2400, amt: 2400 }];
+
 const API =
   "https://lvv3icabfe.execute-api.us-east-1.amazonaws.com/default/helloworld";
 const axios = require("axios").default;
@@ -21,6 +11,7 @@ const Landingpage = () => {
   const [data, setdata] = useState([]);
   const [updatetime, setupdatetime] = useState("");
   const [isLoading, setisLoading] = useState(false);
+  const [Chartprops, setChartprops] = useState([]);
 
   useEffect(() => {
     setisLoading(true);
@@ -34,6 +25,61 @@ const Landingpage = () => {
         var time = new Date(result.data.updateTime);
 
         setupdatetime(time.toLocaleString());
+
+        var ttlcases = [];
+        var ttlnewcases = [];
+        var newdeaths = [];
+        var totaldeaths = [];
+
+        result.data.data.forEach(element => {
+          var tempttlcases = {
+            y: element.local_total_cases,
+            x: element.update_date_time
+          };
+          var tempttlnewcases = {
+            y: element.local_new_cases,
+            x: element.update_date_time
+          };
+
+          var temptnewdeaths = {
+            y: element.local_new_deaths,
+            x: element.update_date_time
+          };
+
+          var temptttldeaths = {
+            y: element.local_deaths,
+            x: element.update_date_time
+          };
+          totaldeaths.push(temptttldeaths);
+          newdeaths.push(temptnewdeaths);
+          ttlcases.push(tempttlcases);
+          ttlnewcases.push(tempttlnewcases);
+        });
+
+        var dataObj = [
+          {
+            id: "Local total cases",
+            color: "hsl(253, 70%, 50%)",
+            data: ttlcases
+          },
+          {
+            id: "Local new cases",
+            color: "hsl(253, 70%, 50%)",
+            data: ttlnewcases
+          },
+          {
+            id: "Local new deaths",
+            color: "hsl(253, 70%, 50%)",
+            data: newdeaths
+          },
+          {
+            id: "Local total deaths",
+            color: "hsl(253, 70%, 50%)",
+            data: totaldeaths
+          }
+        ];
+
+        setChartprops(dataObj);
       })
       .catch(err => {
         setisLoading(false);
@@ -42,18 +88,17 @@ const Landingpage = () => {
   }, []);
 
   return (
-    <div className="">
-      <nav class="navbar navbar-expand-md navbar-dark bg-primary  ">
-        <div class="mx-auto order-0">
-          <span class="navbar-brand mx-auto" href="#">
-            Graphical Representatoin of covid-19 report Sri lanka
+    <div>
+      <nav className="navbar navbar-expand-md navbar-dark bg-primary  ">
+        <div className="mx-auto order-0">
+          <span className="navbar-brand mx-auto navtitle " href="#">
+            Graphical Representation of COVID-19 report Sri Lanka
           </span>
         </div>
       </nav>
-      <div className="container graphOuter">
-        <div className="felxdiv">
-          {" "}
-          <div className="spinnerdashboard">
+      <div id="graphdiv" className=" container chartdiv">
+        <div className="spinnerdashboard">
+          <div className="spinnerinnerdiv">
             <div
               hidden={!isLoading}
               className="spinner-border text-primary loading"
@@ -61,62 +106,61 @@ const Landingpage = () => {
             >
               <span className="sr-only">Loading...</span>
             </div>
+            <span className="navtitle" hidden={isLoading}>
+              Last update : {updatetime && updatetime}
+            </span>
           </div>
         </div>
-        <div className="container  graphInner">
-          {data[0] && (
-            <ResponsiveContainer width="80%" height="80%">
-              <LineChart
-                className="chartsvg"
-                data={data}
-                margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
-              >
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <XAxis dataKey="update_date_time" />
-
-                <YAxis type="number" domain={[0, "dataMax + 20"]} />
-
-                <Tooltip />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="local_total_cases"
-                  name="Total Cases"
-                  stroke="#0F52BA"
-                  // activeDot={{ r: 8 }}
-                />
-
-                <Line
-                  type="monotone"
-                  dataKey="local_new_cases"
-                  stroke="#EC1A28"
-                  name="New Cases"
-                  // activeDot={{ r: 8 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
-        </div>
-
-        <div className="updatediv">Last update : {data[0] && updatetime}</div>
+        <App data={Chartprops} />{" "}
       </div>
-      <footer class="mastfoot mt-auto bg-primary ">
-        <div class="inner">
+      <div className="tablediv container ">
+        <div className="table-responsive  ">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Local total cases</th>
+                <th scope="col">Local new cases</th>
+                <th scope="col">Local new Deaths</th>
+                <th scope="col">Local total Deaths</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((ele, index) => {
+                return (
+                  <tr key={index}>
+                    <th scope="row">{index}</th>
+                    <td>{ele.update_date_time}</td>
+                    <td>{ele.local_new_cases}</td>
+                    <td>{ele.local_total_cases}</td>
+                    <td>{ele.local_new_deaths}</td>
+                    <td>{ele.local_deaths}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <footer className=" text-muted navtitle mastfoot mt-auto bg-primary ">
+        <div className="container">
           <a
+            rel="noopener noreferrer"
             href="https://hpb.health.gov.lk/en"
             target="_blank"
-            className="linkref"
+            className="linkref foottile"
           >
-            Reference HEALTH PROMOTION BUREAU Sri Lanka
+            Reference : HEALTH PROMOTION BUREAU SRI LANAKA
           </a>
-          <br />
+          {/* <br /> */}
           <a
+            rel="noopener noreferrer"
             href="https://github.com/RizkyRajitha/covidgraph"
-            className="linkref"
+            className="linkref float-right"
             target="_blank"
           >
-            <i class="fab fa-github fa-2x"></i>
+            <i className="fab fa-github fa-2x"></i>
           </a>
         </div>
       </footer>
