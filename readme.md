@@ -4,17 +4,14 @@
 
 https://covidlk.now.sh/
 
-This project is a representation of data about ongoing viral pandemic of coronavirus disease 2019 (COVID-19) in Sri Lanka.
+This project is a representation of data about an ongoing viral pandemic of coronavirus disease 2019 (COVID-19) in Sri Lanka.
 
 
-Technologies
-------------
-
-Project is created with:
 * [Reactjs](https://reactjs.org/)
 * [Nodejs](https://nodejs.org/en/)
 * [mongoDB](https://www.mongodb.com/)
 * [AWS Lamda](https://aws.amazon.com/lambda/)
+* [Nivo Graph library ](https://nivo.rocks/line/)
   
 Reference + Sources
 ------------
