@@ -1,6 +1,6 @@
 {
-  "short_name": "RECRUITMENT @ AUXENTA",
-  "name": "RECRUITMENT @ AUXENTA",
+  "short_name": "Graphical COVID-19 report Sri Lanka",
+  "name": "Graphical Representation of COVID-19 report Sri Lanka .Based on HEALTH PROMOTION BUREAU Sri Lanka",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +8,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "https://recaux.herokuapp.com",
+  "start_url": "https://covidlk.now.sh/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"

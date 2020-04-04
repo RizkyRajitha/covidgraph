@@ -17,6 +17,7 @@
 
 .chartdiv {
   height: 60vh;
+  /* width: 80vw; */
 }
 
 .navtitle {
@@ -27,12 +28,27 @@
   font-size: 1.2rem;
 }
 
+@media screen and (max-width: 770px) {
+  .foottileimg {
+    height: 24px;
+  }
+  .foottile {
+    font-size: 0.75rem;
+  }
+}
+
 @media screen and (max-width: 570px) {
   .navtitle {
     font-size: 1rem;
   }
+  .foottile {
+    font-size: 0.75rem;
+  }
   th {
     font-size: 0.8rem;
+  }
+  .foottileimg {
+    height: 24px;
   }
 }
 
@@ -56,7 +72,10 @@
     font-size: 0.8rem;
   }
   .foottile {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+  }
+  .foottileimg {
+    height: 24px;
   }
   /* .footericon {
     margin-top: 1%;
@@ -69,7 +88,7 @@
     font-size: 0.8rem;
   }
   .foottile {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -79,7 +98,7 @@
   }
 
   .foottile {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -111,6 +130,10 @@ a:hover {
   color: white;
   /* background-color: #666666; */
   text-align: center;
+}
+
+.smallnote {
+  font-size: 0rem;
 }
 
 .updatediv {

@@ -1,19 +1,14 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Landingpage from "./pages/landingpage/landingpage";
 
-class App extends Component {
-  componentDidMount() {}
+import ReactGA from "react-ga";
+ReactGA.initialize("UA-162182073-1");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
+class App extends Component {
   render() {
-    return (
-      <Router>
-        <Switch>
-          <Route exact path="*" component={Landingpage} />
-        </Switch>
-      </Router>
-    );
+    return <Landingpage />;
   }
 }
 
