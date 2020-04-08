@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 import App from "./chart";
+import Map from "../../components/map";
 import "./landingpage.scoped.css";
 
 const API =
   "https://lvv3icabfe.execute-api.us-east-1.amazonaws.com/default/helloworld";
+
 const axios = require("axios").default;
 
 const Landingpage = () => {
@@ -14,12 +16,13 @@ const Landingpage = () => {
   const [Chartprops, setChartprops] = useState([]);
   const [Chart2props, setChart2props] = useState([]);
   const [Chart3props, setChart3props] = useState([]);
+  const [DistrictData, setDistrictData] = useState([]);
 
   useEffect(() => {
     setisLoading(true);
     axios
       .get(API)
-      .then(result => {
+      .then((result) => {
         console.log(result.data);
         setdata(result.data.data);
         setisLoading(false);
@@ -37,24 +40,24 @@ const Landingpage = () => {
         var newdeaths = [];
         var totaldeaths = [];
 
-        result.data.data.forEach(element => {
+        result.data.data.forEach((element) => {
           var tempttlcases = {
             y: element.local_total_cases,
-            x: element.update_date_time
+            x: element.update_date_time,
           };
           var tempttlnewcases = {
             y: element.local_new_cases,
-            x: element.update_date_time
+            x: element.update_date_time,
           };
 
           var temptnewdeaths = {
             y: element.local_new_deaths,
-            x: element.update_date_time
+            x: element.update_date_time,
           };
 
           var temptttldeaths = {
             y: element.local_deaths,
-            x: element.update_date_time
+            x: element.update_date_time,
           };
           totaldeaths.push(temptttldeaths);
           newdeaths.push(temptnewdeaths);
@@ -66,38 +69,38 @@ const Landingpage = () => {
           {
             id: "Local total cases",
             color: "hsl(253, 70%, 50%)",
-            data: ttlcases
-          }
+            data: ttlcases,
+          },
         ];
 
         var dataObj2 = [
           {
             id: "",
             color: "hsl(253, 70%, 50%)",
-            data: ttlnewcases
-          }
+            data: ttlnewcases,
+          },
         ];
 
         var dataObj3 = [
           {
             id: "Local new deaths",
             color: "hsl(253, 70%, 50%)",
-            data: newdeaths
+            data: newdeaths,
           },
           {
             id: "Local total deaths",
             color: "hsl(253, 70%, 50%)",
-            data: totaldeaths
-          }
+            data: totaldeaths,
+          },
         ];
-
+        setDistrictData(result.data.districtData);
         setChartprops(dataObj);
         setChart2props(dataObj2);
         setChart3props(dataObj3);
 
         console.log(dataObj3[1]);
       })
-      .catch(err => {
+      .catch((err) => {
         setisLoading(false);
         console.log(err);
       });
@@ -148,6 +151,7 @@ const Landingpage = () => {
           yscalemax={Chart3props[1] && parseInt(Chart3props[1].data[20].y) + 10}
         />
       </div>
+
       <div className="tablediv container ">
         <div className="table-responsive  ">
           <table className="table">
@@ -156,10 +160,7 @@ const Landingpage = () => {
                 <th scope="col">#</th>
                 <th scope="col">Date</th>
                 <th scope="col">Local new cases</th>
-                <th scope="col">
-                  Local total cases{" "}
-                  {/* <span className="smallnote">including chinese paincient</span>{" "} */}
-                </th>
+                <th scope="col">Local total cases </th>
                 <th scope="col">Local new Deaths</th>
                 <th scope="col">Local total Deaths</th>
               </tr>
@@ -181,6 +182,43 @@ const Landingpage = () => {
           </table>
         </div>
       </div>
+
+      <div hidden={isLoading} className="container">
+        <h2 className="mapheading">
+          Distribution of confirmed cases by district{" "}
+        </h2>
+        {DistrictData[0] && <Map districtData={DistrictData} />}
+      </div>
+      {
+        <p className="mapheading">
+          Last updated : {DistrictData[4] && DistrictData[4].date}{" "}
+        </p>
+      }
+      <div className="tablediv container ">
+        <div className="table-responsive  ">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">District</th>
+                <th scope="col">Total cases </th>
+              </tr>
+            </thead>
+            <tbody>
+              {DistrictData.map((ele, index) => {
+                return (
+                  <tr key={index}>
+                    <th scope="row">{index}</th>
+                    <td>{ele.district}</td>
+                    <td>{ele.cases}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <footer className=" text-muted navtitle mastfoot mt-auto bg-primary ">
         <div className="container">
           <a
@@ -224,3 +262,6 @@ const Landingpage = () => {
 };
 
 export default Landingpage;
+/**
+ 
+ */
