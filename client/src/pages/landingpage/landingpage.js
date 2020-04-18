@@ -17,13 +17,16 @@ const Landingpage = () => {
   const [Chart2props, setChart2props] = useState([]);
   const [Chart3props, setChart3props] = useState([]);
   const [DistrictData, setDistrictData] = useState([]);
+  const [timerange, settimerange] = useState(true);
+  const [alltimedata, setalltimedata] = useState({});
+  const [districtupdatedate, setdistrictupdatedate] = useState("");
 
   useEffect(() => {
     setisLoading(true);
     axios
       .get(API)
       .then((result) => {
-        console.log(result.data);
+        // console.log(result.data);
         setdata(result.data.data);
         setisLoading(false);
 
@@ -75,7 +78,7 @@ const Landingpage = () => {
 
         var dataObj2 = [
           {
-            id: "",
+            id: "Local new cases",
             color: "hsl(253, 70%, 50%)",
             data: ttlnewcases,
           },
@@ -94,17 +97,121 @@ const Landingpage = () => {
           },
         ];
         setDistrictData(result.data.districtData);
-        setChartprops(dataObj);
-        setChart2props(dataObj2);
-        setChart3props(dataObj3);
 
-        console.log(dataObj3[1]);
+        // setChartprops(dataObj);
+        // setChart2props(dataObj2);
+        // setChart3props(dataObj3);
+
+        var originalobj = {
+          dataObj: dataObj,
+          dataObj2: dataObj2,
+          dataObj3: dataObj3,
+        };
+
+        var Chartpropstemp1 = {
+          id: "Local total cases",
+          data: originalobj.dataObj[0].data.slice(-14),
+        };
+
+        var Chartpropstemp2 = {
+          id: "Local new cases",
+          data: originalobj.dataObj2[0].data.slice(-14),
+        };
+
+        var Chartpropstemp3 = [
+          {
+            id: "Local new deaths",
+            color: "hsl(253, 70%, 50%)",
+            data: originalobj.dataObj3[0].data.slice(-14),
+          },
+          {
+            id: "Local total deaths",
+            color: "hsl(253, 70%, 50%)",
+            data: originalobj.dataObj3[1].data.slice(-14),
+          },
+        ];
+
+        // Chartpropstemp.data = a
+
+        setChartprops([Chartpropstemp1]);
+        setChart2props([Chartpropstemp2]);
+        setChart3props(Chartpropstemp3);
+
+        setalltimedata(originalobj);
+
+        // console.log(dataObj3[1]);
       })
       .catch((err) => {
         setisLoading(false);
-        console.log(err);
+        // console.log(err);
+      });
+
+    axios
+      .get(
+        "https://api.github.com/repos/arimacdev/covid19-srilankan-data/commits?path=/Districts/districts_lk.csv"
+      )
+      .then((result) => {
+        // console.log(result.data[0].commit.committer.date);
+
+        var updateseddis = new Date(result.data[0].commit.committer.date);
+
+        setdistrictupdatedate(updateseddis.toLocaleDateString());
+
+        // console.log(updateseddis.toLocaleString());
+      })
+      .catch((err) => {
+        // console.log(err);
       });
   }, []);
+
+  const ontoggledate = () => {
+    // console.log(timerange);
+    // console.log(alltimedata);
+
+    if (!timerange) {
+      //arr)
+
+      var Chartpropstemp1 = {
+        id: "Local total cases",
+        data: alltimedata.dataObj[0].data.slice(-14),
+      };
+
+      var Chartpropstemp2 = {
+        id: "Local new cases",
+        data: alltimedata.dataObj2[0].data.slice(-14),
+      };
+
+      var Chartpropstemp3 = [
+        {
+          id: "Local new deaths",
+          color: "hsl(253, 70%, 50%)",
+          data: alltimedata.dataObj3[0].data.slice(-14),
+        },
+        {
+          id: "Local total deaths",
+          color: "hsl(253, 70%, 50%)",
+          data: alltimedata.dataObj3[1].data.slice(-14),
+        },
+      ];
+
+      // Chartpropstemp.data = a
+
+      setChartprops([Chartpropstemp1]);
+      setChart2props([Chartpropstemp2]);
+      setChart3props(Chartpropstemp3);
+      // console.log("chrttttttttt");
+      // console.log(Chartprops);
+    } else {
+      // Chartpropstemp = alltimedata.dataObj;
+
+      // Chartpropstemp.data = alltimedata.dataObj[0].data;
+
+      setChartprops(alltimedata.dataObj);
+      setChart2props(alltimedata.dataObj2);
+      setChart3props(alltimedata.dataObj3);
+    }
+    settimerange(!timerange);
+  };
 
   return (
     <div>
@@ -130,6 +237,19 @@ const Landingpage = () => {
             </span>
           </div>
         </div>
+        <div className="custom-control custom-switch">
+          <input
+            type="checkbox"
+            className="custom-control-input"
+            id="customSwitch1"
+            onChange={() => {
+              ontoggledate();
+            }}
+          />
+          <label className="custom-control-label" for="customSwitch1">
+            {!timerange ? "All time" : "Last two weeks"}
+          </label>
+        </div>
         <App
           data={Chartprops}
           linecolor="	#ff4000"
@@ -138,7 +258,6 @@ const Landingpage = () => {
       </div>
       <div id="graphdiv" className=" container chartdiv">
         <App
-          symbolhide={true}
           data={Chart2props}
           linecolor="#fa0000"
           legendName={"Local new cases"}
@@ -148,11 +267,14 @@ const Landingpage = () => {
         <App
           data={Chart3props}
           legendName={"Local deaths"}
-          yscalemax={Chart3props[1] && parseInt(Chart3props[1].data[20].y) + 10}
+          yscalemax={
+            Chart3props[1] &&
+            parseInt(Chart3props[1].data[Chart3props[1].data.length - 1].y) + 10
+          }
         />
       </div>
 
-      <div className="tablediv container ">
+      <div hidden={isLoading} className="tablediv container ">
         <div className="table-responsive  ">
           <table className="table">
             <thead>
@@ -190,11 +312,11 @@ const Landingpage = () => {
         {DistrictData[0] && <Map districtData={DistrictData} />}
       </div>
       {
-        <p className="mapheading">
-          Last updated : {DistrictData[4] && DistrictData[4].date}{" "}
+        <p hidden={isLoading} className="mapheading">
+          Last updated : {districtupdatedate}{" "}
         </p>
       }
-      <div className="tablediv container ">
+      <div hidden={isLoading} className="tablediv container ">
         <div className="table-responsive  ">
           <table className="table">
             <thead>
