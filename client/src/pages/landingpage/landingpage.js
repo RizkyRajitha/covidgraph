@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
-
+// import React, { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "preact/compat";
 import App from "./chart";
 import Map from "../../components/map";
-import "./landingpage.scoped.css";
+import "./landingpage.css";
 
 const API =
   "https://lvv3icabfe.execute-api.us-east-1.amazonaws.com/default/helloworld";
 
 const axios = require("axios").default;
+
+let debouncetimerstacked = null;
+let debouncetimertime = null;
 
 const Landingpage = () => {
   const [data, setdata] = useState([]);
@@ -19,6 +22,9 @@ const Landingpage = () => {
   const [DistrictData, setDistrictData] = useState([]);
   const [timerange, settimerange] = useState(true);
   const [alltimedata, setalltimedata] = useState({});
+  const [stacked, setstacked] = useState(false);
+  const [newchartpropsstackets, setnewchartpropsstackets] = useState([]);
+
   const [districtupdatedate, setdistrictupdatedate] = useState("");
 
   useEffect(() => {
@@ -26,7 +32,6 @@ const Landingpage = () => {
     axios
       .get(API)
       .then((result) => {
-        // console.log(result.data);
         setdata(result.data.data);
         setisLoading(false);
 
@@ -98,10 +103,6 @@ const Landingpage = () => {
         ];
         setDistrictData(result.data.districtData);
 
-        // setChartprops(dataObj);
-        // setChart2props(dataObj2);
-        // setChart3props(dataObj3);
-
         var originalobj = {
           dataObj: dataObj,
           dataObj2: dataObj2,
@@ -131,19 +132,14 @@ const Landingpage = () => {
           },
         ];
 
-        // Chartpropstemp.data = a
-
         setChartprops([Chartpropstemp1]);
         setChart2props([Chartpropstemp2]);
         setChart3props(Chartpropstemp3);
 
         setalltimedata(originalobj);
-
-        // console.log(dataObj3[1]);
       })
       .catch((err) => {
         setisLoading(false);
-        // console.log(err);
       });
 
     axios
@@ -151,26 +147,39 @@ const Landingpage = () => {
         "https://api.github.com/repos/arimacdev/covid19-srilankan-data/commits?path=/Districts/districts_lk.csv"
       )
       .then((result) => {
-        // console.log(result.data[0].commit.committer.date);
-
         var updateseddis = new Date(result.data[0].commit.committer.date);
 
         setdistrictupdatedate(updateseddis.toLocaleDateString());
-
-        // console.log(updateseddis.toLocaleString());
       })
-      .catch((err) => {
-        // console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
+  const ontogglestacked = () => {
+    if (!stacked) {
+      var stackets = [...Chartprops, ...Chart2props, ...Chart3props];
+      setnewchartpropsstackets(stackets);
+    }
+    setstacked(!stacked);
+  };
+
+  const debouncehandlestacked = () => {
+    clearTimeout(debouncetimerstacked);
+    debouncetimerstacked = setTimeout(() => {
+      // this.toggleCheck();
+      ontogglestacked();
+    }, 200);
+  };
+
+  const debouncehandletime = () => {
+    clearTimeout(debouncetimertime);
+    debouncetimertime = setTimeout(() => {
+      // this.toggleCheck();
+      ontoggledate();
+    }, 200);
+  };
+
   const ontoggledate = () => {
-    // console.log(timerange);
-    // console.log(alltimedata);
-
     if (!timerange) {
-      //arr)
-
       var Chartpropstemp1 = {
         id: "Local total cases",
         data: alltimedata.dataObj[0].data.slice(-14),
@@ -194,17 +203,19 @@ const Landingpage = () => {
         },
       ];
 
-      // Chartpropstemp.data = a
+      var stackets = [Chartpropstemp1, Chartpropstemp2, ...Chartpropstemp3];
+      setnewchartpropsstackets(stackets);
 
       setChartprops([Chartpropstemp1]);
       setChart2props([Chartpropstemp2]);
       setChart3props(Chartpropstemp3);
-      // console.log("chrttttttttt");
-      // console.log(Chartprops);
     } else {
-      // Chartpropstemp = alltimedata.dataObj;
-
-      // Chartpropstemp.data = alltimedata.dataObj[0].data;
+      var allstacks = [
+        ...alltimedata.dataObj,
+        ...alltimedata.dataObj2,
+        ...alltimedata.dataObj3,
+      ];
+      setnewchartpropsstackets(allstacks);
 
       setChartprops(alltimedata.dataObj);
       setChart2props(alltimedata.dataObj2);
@@ -223,7 +234,7 @@ const Landingpage = () => {
         </div>
       </nav>
       <div id="graphdiv" className=" container chartdiv">
-        <div className="spinnerdashboard">
+        <div className="spinnerdashboard columns">
           <div className="spinnerinnerdiv">
             <div
               hidden={!isLoading}
@@ -237,42 +248,72 @@ const Landingpage = () => {
             </span>
           </div>
         </div>
-        <div className="custom-control custom-switch">
+        <div className=" togglebtns custom-control custom-switch">
           <input
             type="checkbox"
-            className="custom-control-input"
+            className="custom-control-input "
             id="customSwitch1"
             onChange={() => {
-              ontoggledate();
+              debouncehandletime();
             }}
           />
-          <label className="custom-control-label" for="customSwitch1">
+          <label className="custom-control-label " htmlFor="customSwitch1">
             {!timerange ? "All time" : "Last two weeks"}
           </label>
         </div>
-        <App
-          data={Chartprops}
-          linecolor="	#ff4000"
-          legendName={"Local total cases"}
-        />
+
+        <div className=" togglebtns custom-control custom-switch">
+          <input
+            type="checkbox"
+            className="custom-control-input"
+            id="customSwitch2"
+            onChange={() => {
+              debouncehandlestacked();
+            }}
+          />
+          <label className="custom-control-label" for="customSwitch2">
+            {stacked ? "Stacked" : "Standard"}
+          </label>
+        </div>
+
+        {!stacked && (
+          <App
+            data={Chartprops}
+            linecolor="	#ff4000"
+            legendName={"Local total cases"}
+          />
+        )}
+        {stacked && (
+          <App
+            data={newchartpropsstackets}
+            // linecolor="	#ff4000"
+            legendName={"cases"}
+          />
+        )}
       </div>
-      <div id="graphdiv" className=" container chartdiv">
-        <App
-          data={Chart2props}
-          linecolor="#fa0000"
-          legendName={"Local new cases"}
-        />
-      </div>
-      <div id="graphdiv" className=" container chartdiv">
-        <App
-          data={Chart3props}
-          legendName={"Local deaths"}
-          yscalemax={
-            Chart3props[1] &&
-            parseInt(Chart3props[1].data[Chart3props[1].data.length - 1].y) + 10
-          }
-        />
-      </div>
+      {!stacked && (
+        <>
+          <div id="graphdiv" className=" container chartdiv">
+            <App
+              data={Chart2props}
+              linecolor="#fa0000"
+              legendName={"Local new cases"}
+            />
+          </div>
+          <div id="graphdiv" className=" container chartdiv">
+            <App
+              data={Chart3props}
+              legendName={"Local deaths"}
+              yscalemax={
+                Chart3props[1] &&
+                parseInt(
+                  Chart3props[1].data[Chart3props[1].data.length - 1].y
+                ) + 10
+              }
+            />
+          </div>
+        </>
+      )}
 
       <div hidden={isLoading} className="tablediv container ">
         <div className="table-responsive  ">
@@ -288,10 +329,10 @@ const Landingpage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((ele, index) => {
+              {data.reverse().map((ele, index) => {
                 return (
                   <tr key={index}>
-                    <th scope="row">{index}</th>
+                    <th scope="row">{data.length - index}</th>
                     <td>{ele.update_date_time}</td>
                     <td>{ele.local_new_cases}</td>
                     <td>{ele.local_total_cases}</td>
@@ -383,7 +424,4 @@ const Landingpage = () => {
   );
 };
 
-export default Landingpage;
-/**
- 
- */
+export default memo(Landingpage);

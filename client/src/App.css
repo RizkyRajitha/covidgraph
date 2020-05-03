@@ -1,1 +1,9 @@
+body {
+  /* background-color: black; */
+  color: #ffffff;
+  background-color: #243447;
 
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(100vh);
+  scroll-snap-type: y mandatory;
+}

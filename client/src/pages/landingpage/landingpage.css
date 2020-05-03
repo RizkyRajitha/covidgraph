@@ -11,7 +11,7 @@
 
 .tablediv {
   /* width: 80%; */
-  margin-top: 5%;
+  margin-top: 10vmin;
   margin-bottom: 1%;
 }
 
@@ -55,6 +55,10 @@
   .foottileimg {
     height: 24px;
   }
+}
+
+.togglebtns {
+  font-size: 2vmin;
 }
 
 @media screen and (max-width: 500px) {
