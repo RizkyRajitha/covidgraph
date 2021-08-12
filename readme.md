@@ -2,10 +2,6 @@
 
 ![website image](https://res.cloudinary.com/dijjqfsto/image/upload/v1585492686/covid_cmxq7s.png)
 
-![Deploy to Now](https://badgen.net/badge/%E2%96%B2%20Deploy%20to%20Now/$%20now%20RizkyRajitha%2Fcovidgraph/black)
-<br>
- https://covidlk.now.sh/
-
 [![Netlify Status](https://api.netlify.com/api/v1/badges/409390a0-9053-4579-a5bf-09c6443fd786/deploy-status)](https://covidlk.netlify.app/)
 
 <br>
